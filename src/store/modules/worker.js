@@ -1,3 +1,5 @@
+import * as mutationType from './mutation-types.js';
+
 const initialState = {
     workers: [],
 }
@@ -16,13 +18,13 @@ export default {
     },
 
     mutations: {
-        addWorker(state, payload) {
+        [mutationType.ADD_WORKER](state, payload) {
             state.workers = [...state.workers, payload];
         },  
-        deleteWorke(state, deleteWorkerId) {
+        [mutationType.DELETE_WORKER](state, deleteWorkerId) {
             state.workers = state.workers.filter(worker => worker.id !== deleteWorkerId)
         },
-        editWorker(state, editedWorker) {
+        [mutationType.EDIT_WORKER](state, editedWorker) {
             state.workers = state.workers.map(item => (item.id === editedWorker.id ? editedWorker : item))
         }  
     },

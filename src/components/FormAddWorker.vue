@@ -1,43 +1,47 @@
 <template>
-  <form class="form">
+  <form @submit.prevent="handlerFormSubmit" class="form">
     <input
-      v-model="firstName"
+      v-model="formData.firstName"
       name="first-name"
       type="text"
       class="form__input"
       minlength="2"
       maxlength="40"
-      autocomplete="false"
+      autocomplete="off"
+      placeholder="First name"
       required
     />
     <input
-      v-model="lastName"
+      v-model="formData.lastName"
       name="last-name"
       type="text"
       class="form__input"
       minlength="2"
       maxlength="40"
-      autocomplete="false"
+      autocomplete="off"
+      placeholder="Last name"
       required
     />
     <input
-      v-model="department"
+      v-model="formData.department"
       name="department"
       type="text"
       class="form__input"
       minlength="2"
       maxlength="40"
-      autocomplete="false"
+      autocomplete="off"
+      placeholder="Department"
       required
     />
     <input
-      v-model="salary"
+      v-model="formData.salary"
       name="salary"
       type="text"
       class="form__input"
       minlength="2"
       maxlength="40"
-      autocomplete="false"
+      autocomplete="off"
+      placeholder="Salary"
       required
     />
     <button class="form__button" type="submit">create new worker</button>
@@ -45,27 +49,50 @@
 </template>
 
 <script>
+import uniqid from "uniqid";
+import { succsessNotification } from '@/utils/notificationManager.js'
+
+const INIT_FORM_DATA = {
+  firstName: "",
+  lastName: "",
+  department: "",
+  salary: "",
+};
 export default {
   name: "FormAddWorker",
   components: {},
   data() {
     return {
-      firstName: "",
-      lastName: "",
-      department: "",
-      salary: "",
+      formData: { ...INIT_FORM_DATA },
     };
   },
   methods: {
-    handlerFormSubmit() {},
+    handlerFormSubmit() {
+      const data = {
+        id: uniqid(),
+        ...this.formData,
+      };
+      this.$emit("form:submit", data);
+      succsessNotification(this.messageCreate)
+      this.reset();
+    },
+
+    reset() {
+      this.formData = {
+        ...INIT_FORM_DATA,
+      };
+    },
   },
-  computed: {},
-  watch: {},
+  computed: {
+    messageCreate() {
+      return `New Worker ${this.formData.firstName} ${this.formData.lastName} create`;
+    }
+  },
 };
 </script>
 
 <style lang="scss" scoped>
-@import '../style/variables.scss';
+@import "../style/variables.scss";
 
 .form {
   width: 400px;
@@ -82,11 +109,34 @@ export default {
     font-size: 14px;
     transition: border-color 0.4s ease-in;
     &::placeholder {
-      color: #929191;
+      color: $input-placeholder-color;
     }
     &:focus {
-      box-shadow: inset 5px 5px 15px -2px #000000;
-      border-color: #d84f4f;
+      box-shadow: inset 5px 5px 15px -2px $input-focus-shadow-color;
+      border-color: $input-border-focus-color;
+    }
+    &:valid {
+      border-color: $input-border-valid-color;
+    }
+  }
+  &__button {
+    width: 100%;
+    height: 40px;
+    background-color: $form-button-background;
+    outline: none;
+    border: none;
+    font-size: 16px;
+    font-weight: bold;
+    color: $form-button-text-color;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+    transition: background-color 0.4s ease-in;
+    &:hover {
+      background-color: transparent;
+      border: 3px solid $form-button-hover-border-color;
+      color: $form-button-hover-text-color;
     }
   }
 }
