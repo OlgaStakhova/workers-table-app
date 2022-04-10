@@ -4,7 +4,7 @@
       <BackIcon class="back-button-icon"/>
     </BackButton>
     <h2 class="page-title">Form create new worker</h2>
-    <FormAddWorker @form:submit="handlerFormData"/>
+    <FormAddWorker @form:create="handlerFormCreate" @form:edit="handlerFormEdit" :editItem="editItem"/>
   </div>
 </template>
 
@@ -13,7 +13,7 @@ import FormAddWorker from '@/components/FormAddWorker.vue';
 import BackButton from '@/components/BackButton.vue'
 import BackIcon from '@/assets/svg/back-icon.svg';
 import { mapMutations } from 'vuex';
-import { ADD_WORKER } from '@/store/modules/mutation-types.js'
+import { ADD_WORKER, EDIT_WORKER } from '@/store/modules/mutation-types.js'
 export default {
   name: "AddWorkerPage",
   components: {
@@ -22,13 +22,23 @@ export default {
     BackButton,
   },
   data() {
-    return {};
+    return {
+      editItem: null,
+    };
+  },
+  created() {
+    if(this.$route.params && this.$route.params.item) {
+      this.editItem = this.$route.params.item;
+    }
   },
   methods: {
-    ...mapMutations("worker", [ADD_WORKER]),
+    ...mapMutations("worker", [ADD_WORKER, EDIT_WORKER]),
 
-    handlerFormData(data) {
-       this.ADD_WORKER(data)
+    handlerFormCreate(data) {
+       this.ADD_WORKER(data);
+    },
+    handlerFormEdit(data) {
+       this.EDIT_WORKER(data);
     }
   },
   computed: {},

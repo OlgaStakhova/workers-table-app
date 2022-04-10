@@ -36,21 +36,23 @@
     <input
       v-model="formData.salary"
       name="salary"
-      type="text"
+      type="number"
       class="form__input"
-      minlength="2"
-      maxlength="40"
+      min="1"
       autocomplete="off"
       placeholder="Salary"
       required
     />
-    <button class="form__button" type="submit">create new worker</button>
+    <button class="form__button" type="submit">
+      {{ isEdit ? "save edited worker" : "create new worker" }}
+    </button>
   </form>
 </template>
 
 <script>
 import uniqid from "uniqid";
-import { succsessNotification } from '@/utils/notificationManager.js'
+import { succsessNotification } from "@/utils/notificationManager.js";
+import { routeAlias } from '@/constants/routeAlias'
 
 const INIT_FORM_DATA = {
   firstName: "",
@@ -61,20 +63,43 @@ const INIT_FORM_DATA = {
 export default {
   name: "FormAddWorker",
   components: {},
+  props: {
+    editItem: {
+      type: Object,
+    },
+  },
   data() {
     return {
       formData: { ...INIT_FORM_DATA },
+      isEdit: false,
     };
+  },
+  created() {
+    if (this.editItem) {
+      this.formData = { ...this.editItem };
+      this.isEdit = true;
+    }
   },
   methods: {
     handlerFormSubmit() {
-      const data = {
-        id: uniqid(),
-        ...this.formData,
-      };
-      this.$emit("form:submit", data);
-      succsessNotification(this.messageCreate)
-      this.reset();
+      let data = null;
+      if (this.isEdit) {
+        data = {
+          ...this.formData,
+        };
+        this.$emit("form:edit", data);
+        succsessNotification(this.messageEdit);
+        this.$router.push({ name: routeAlias.TABLE_PAGE });
+        return;
+      } 
+        data = {
+          id: uniqid(),
+          ...this.formData,
+        };
+        this.$emit("form:create", data);
+        succsessNotification(this.messageCreate);
+        this.reset();
+
     },
 
     reset() {
@@ -86,7 +111,10 @@ export default {
   computed: {
     messageCreate() {
       return `New Worker ${this.formData.firstName} ${this.formData.lastName} create`;
-    }
+    },
+    messageEdit() {
+      return `Worker ${this.formData.firstName} ${this.formData.lastName} was edited`;
+    },
   },
 };
 </script>
