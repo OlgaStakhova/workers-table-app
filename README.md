@@ -1,4 +1,5 @@
 ## workers-table-app
+view app: https://zesty-alpaca-905e38.netlify.app/
 
 ## Project setup
 ```
