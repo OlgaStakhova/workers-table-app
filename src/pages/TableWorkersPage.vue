@@ -20,12 +20,6 @@ export default {
       filters: null,
     };
   },
-  created() {
-    const dataFromSave =
-      localStorage.getItem("workers:save:data") &&
-      JSON.parse(localStorage.getItem("workers:save:data"));
-    this.init(dataFromSave);
-  },
   methods: {
     handlerChangeFilters(filters) {
       this.filters = filters;
