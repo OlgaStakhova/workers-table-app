@@ -80,7 +80,6 @@ export default {
   &__item .link {
     font-size: $nav-item-font-size;
     color: $nav-item-color;
-    text-transform: uppercase;
     cursor: pointer;
   }
   &__item.active::before {

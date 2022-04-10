@@ -89,7 +89,7 @@ export default {
         };
         this.$emit("form:edit", data);
         succsessNotification(this.messageEdit);
-        this.$router.push({ name: routeAlias.TABLE_PAGE });
+        this.$nextTick(()=> this.$router.push({ name: routeAlias.TABLE_PAGE }));
         return;
       } 
         data = {

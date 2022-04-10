@@ -26,7 +26,7 @@ export default {
         },
         [mutationType.EDIT_WORKER](state, editedWorker) {
             state.workers = state.workers.map(item => (item.id === editedWorker.id ? editedWorker : item))
-        }  
+        },
     },
 }
 

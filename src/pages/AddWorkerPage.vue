@@ -39,10 +39,8 @@ export default {
     },
     handlerFormEdit(data) {
        this.EDIT_WORKER(data);
-    }
+    },
   },
-  computed: {},
-  watch: {},
 };
 </script>
 
